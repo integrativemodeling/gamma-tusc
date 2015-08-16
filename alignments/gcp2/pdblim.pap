@@ -1,0 +1,64 @@
+ _aln.pos           10        20        30        40        50        60
+GCP4_HUMAN  ----------------------------------------------------------MIHELLLA 
+GCP2_YEAST  MEIKEVDDRAELLRYTNNIPLLGKLVNHQPLWSTNPKLKSFSLEKISAPDQRRVQEALVVKDLLNV 
+ _consrvd                                                                 **
+
+ _aln.pos     70        80        90       100       110       120       130
+GCP4_HUMAN  LSGYPGSIFTWNKR---------SGLQVSQDFPFLHPSETSVLNRLCRLGTDYIRFTEFIEQYTGH 
+GCP2_YEAST  LIGLEGTYIRYFNDYEPSDPETPIEFKIAKKM---DPSFKTFSRRIVRYGKQYMILTRAYEKWSDT 
+ _consrvd   * *  *                              **      *  * *  *   *   *
+
+ _aln.pos        140       150       160       170       180       190
+GCP4_HUMAN  GGLHGIYLRAFCTGLDSVLQPYRQ--ALLDLEQEFLGDPHLSISHVNYFLDQFQL--LFPSVMVVV 
+GCP2_YEAST  --SFGMVLQRFAYEIRRFLEDVYLKTLVERLERDFNKVPNFSIRELEQIINETEVNKQMELLYNIY 
+ _consrvd       *  *  *       *           **  *   *  **
+
+ _aln.pos  200       210       220       230       240       250       260
+GCP4_HUMAN  EQIKS-----------------------------------------QKIHGCQILETVYKHSCG-- 
+GCP2_YEAST  EEIFREIEERRTNQSSQEDFNNFMDSMKNESSLHLRLMVAFDTTVYPVPKGGAILKIFQQKILENL 
+ _consrvd   * *                                               *  **
+
+ _aln.pos      270       280       290       300       310       320       330
+GCP4_HUMAN  GLPPVRSALEKILAVCHGVMYKQLSAWMLHGLLLDQHEEFFIKQG---------------SLKQFS 
+GCP2_YEAST  GDRSSVMFLKKLLNNISQDYCTMLYEWLTQGILNDPYQEFMTYDDLEGKTDNIFDTRDRAWDTQYF 
+ _consrvd   *       * * *          *  *   * * *   **                       *
+
+ _aln.pos          340       350       360       370       380       390
+GCP4_HUMAN  LRVEILPSYI----PVRVAEKILFVGESVQMFEN-NVNLT-------SILKNQEDTFAAELHRLKQ 
+GCP2_YEAST  IRKDVLLRDCDSEEDKNLLFKMLRTGILLKVVRASLQIPTIPSNSSD----------ITIQEINDF 
+ _consrvd    *   *              * *  *             *
+
+ _aln.pos    400       410       420       430       440       450       460
+GCP4_HUMAN  QPLFSLVDFEQVVDRIRSTVAEHLWKLMVEESDLLGQLKIIKDFYLL-GRGELFQAFIDTAQHMLK 
+GCP2_YEAST  ADLMEGSNLELYVDKCYSRANEIFLKLFFQGYDLINVLKHLQQIFLGYQSGHNVLKFLTKNMGELT 
+ _consrvd     *      *  **   *   *   **     **   **      *    *     *       *
+
+ _aln.pos        470       480       490       500       510       520
+GCP4_HUMAN  TPPTAVTEHDVNVAFQQSAHKVLLDDDNL--LPLLHLTIEYHG----------------------- 
+GCP2_YEAST  KHYRNDNNANYDKLLQNFELERQSENPNNLMRQLLMIQFDTETLPQVLSHYLQIYPEVPENNSAND 
+ _consrvd                  *           *     **
+
+ _aln.pos  530       540       550       560       570       580       590
+GCP4_HUMAN  ----------------------------------------ASGWAALGLSYKVQWPLHILFTPAVL 
+GCP2_YEAST  DSDPLMHANNFKNMNAILFDELSKERTGAYHGSNLELYTPKSAIYHLKFDINIPYPLNIIISRTCM 
+ _consrvd                                            *    *        ** *
+
+ _aln.pos      600       610       620       630       640       650       660
+GCP4_HUMAN  EKYNVVFKYLLSVRRVQAELQHCWALQMQRKHLKS--------NQTDAIKWRLRNHMAFLVDNLQY 
+GCP2_YEAST  IKYQIILRYQLVLQYHSRLLDETWMDLNKTPSWKYRGYSHTVKRRIVRATRVLHAKMNHFIKTIME 
+ _consrvd    **     * *        *   *         *                  *   *
+
+ _aln.pos          670       680       690       700       710       720
+GCP4_HUMAN  YLQVDVLESQFSQLLHQINSTRDFESIRLAHDHFLSNLLAQSFILLKPVFHCLNEILDLCHSFCSL 
+GCP2_YEAST  YFNQNVIDKEVYSLEKCYRNPTLAVAIQNELEGGLTNIMTNRCLS--DLIPLQLQIFDIVYKFCKF 
+ _consrvd   *    *       *            *       * *                  * *    **
+
+ _aln.pos    730       740       750       760       770       780       790
+GCP4_HUMAN  VSQNL--L------------------------------------DERGAAQLSILVKGFSRQSSLL 
+GCP2_YEAST  IKSMRAKLCQLDPVLYEKHKSGMMKTLNEGYRTNNGGQEDVGYQEDAALELIQKLIEYISNASSIF 
+ _consrvd          *                                              *    *  **
+
+ _aln.pos        800       810       820       830       840
+GCP4_HUMAN  FKILSSVRNHQINSDLAQLLLRLDYN------KYY-------------- 
+GCP2_YEAST  RKCLINFTQEL-STEKFDFYDSSSVDAAGIERVLYSIVPPRSASASSQR 
+ _consrvd    * *                              *

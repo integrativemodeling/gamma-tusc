@@ -1,0 +1,7 @@
+sses:
+        helices:
+                - [56,67]
+        sheets:
+                - [[86,89]]
+        loops:
+                - [55,55]
