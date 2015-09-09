@@ -10,8 +10,6 @@ import sys
 from optparse import OptionParser
 import sequence_tools
 
-
-
 def parse_args():
     usage = """usage %prog [options] <alignment_fn> <template_code> <target_code> <max_insertion_size> <out_prefix>
     Removes insertions, with options to
@@ -39,13 +37,13 @@ def run():
     options, args = parse_args()
     aln_fn, template_code, target_code, max_ins_size, out_prefix=args
     max_ins_size = int(max_ins_size)
-
-    aln = alignment(env,aln_fn,align_codes=[template_code,target_code])
+    aln = alignment(env,file=aln_fn,align_codes=[template_code,target_code],alignment_format='FASTA')
     iremove = sequence_tools.InsertionRemover(aln,max_ins_size)
     if options.pdb_aln!='':
-        iremove.limit_to_pdb(options.pdb_aln)
+        pdb_aln = alignment(env,file=options.pdb_aln)
+        iremove.limit_to_pdb(pdb_aln)
     if options.sse_fn!='':
-        mo = ModelOptions(options.sse_fn)
+        mo = sequence_tools.ModelOptions(options.sse_fn)
         iremove.enable_sses(mo)
     fix_aln = iremove.get_alignment()
     fix_aln.write(out_prefix+'.pir',alignment_format="PIR")

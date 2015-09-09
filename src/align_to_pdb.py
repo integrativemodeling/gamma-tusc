@@ -1,5 +1,5 @@
 from modeller import *
-import sys
+import sys,os
 
 def run(aln_fn,pdb_fn,code,out_prefix):
 
@@ -15,7 +15,9 @@ def run(aln_fn,pdb_fn,code,out_prefix):
     new_aln = alignment(env)
     new_aln.append_sequence(full_seq)
     new_aln[0].code = "ORIG_SEQ"
+    fn = os.path.splitext(os.path.basename(pdb_fn))[0]
     new_aln.append_model(mdl,'PDB_SEQ')
+    new_aln[1].atom_file=fn
     new_aln.salign(overhang=50, gap_penalties_1d=(-450, -50),
                    alignment_type='tree', output='ALIGNMENT')
     new_aln.write(out_prefix+'.pap',alignment_format='PAP')

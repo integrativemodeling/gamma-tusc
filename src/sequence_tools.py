@@ -191,6 +191,7 @@ class InsertionRemover:
             self.targ = targ
             self.do_not_delete = False
             self.to_delete = False
+            self.pdb_aln = None
         def __repr__(self):
             return '%s%i %s%i'%(self.temp,self.ntemp_orig,self.targ,self.ntarg_orig)
 
@@ -216,6 +217,7 @@ class InsertionRemover:
     def limit_to_pdb(self,pdb_aln):
         """Replace template residues with gaps if they are not in the PDB alignment.
         Expecting first sequence in alignment to be the full sequence, second to be PDB"""
+        self.pdb_aln = pdb_aln
         complete_pos = get_seq_from_aln(pdb_aln,0)
         pdb_pos = get_seq_from_aln(pdb_aln,1)
         complete_seq = ''.join([t.code for t in pdb_aln[0].residues])
@@ -259,9 +261,6 @@ class InsertionRemover:
             else:
                 if temp_seq!='':
                     on_delete = True
-        #print
-        #print 'temp seq:',temp_seq
-        #print 'targ seq:',targ_seq
         aln = alignment(self.orig_aln.env)
         aln.append_sequence(temp_seq)
         aln.append_sequence(targ_seq)
@@ -269,6 +268,13 @@ class InsertionRemover:
         aln[0].name = self.orig_aln[0].name
         aln[1].code = self.orig_aln[1].code
         aln[1].name = self.orig_aln[1].name
+        if self.pdb_aln:
+            aln[0].range = self.pdb_aln[1].range
+            aln[0].atom_file = self.pdb_aln[1].atom_file
+            aln[0].source = self.pdb_aln[1].source
+            aln[0].prottyp = self.pdb_aln[1].prottyp
+            aln[0].resolution = self.pdb_aln[1].resolution
+            aln[0].rfactor = self.pdb_aln[1].rfactor
         return aln
 
     def get_current_target_alignment(self):
