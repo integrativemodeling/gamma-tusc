@@ -36,7 +36,24 @@ def get_seqs_from_pir(aln_fn):
         cur_seq = ''
     return seqs
 
-#def get_seqs_from_fasta(aln_fn):
+def get_seqs_from_fasta(aln_fn):
+    inf = open(aln_fn)
+    seqs = {}
+    cur_seq = ''
+    start_seq = False
+    for l in inf:
+        if l[0]=='>':
+            if cur_seq!='':
+                seqs[seqname] = cur_seq
+                cur_seq = ''
+            seqname = l.strip('\n')[1:]
+            continue
+        else:
+            cur_seq+=l.strip('\n')
+    if cur_seq!='':
+        seqs[seqname] = cur_seq
+        cur_seq = ''
+    return seqs
 
 
 def write_align(aln,prefix):
@@ -61,7 +78,7 @@ class SequenceShifter:
         seq1 = get_seq_from_aln(aln_to_orig,1)
         n_final = 1
         self.insertions = []
-        cur_ins=[1,0]
+        cur_ins = [1,0]
         on_insert = False
 
         # make sequence map and store insertions
@@ -70,7 +87,8 @@ class SequenceShifter:
                 self.orig_to_final_dict[n+1] = n_final
                 n_final+=1
                 if on_insert:
-                    self.insertions.append(cur_ins)
+                    if cur_ins[0]!=0:
+                        self.insertions.append(cur_ins)
                     on_insert = False
             else:
                 if on_insert:
@@ -79,8 +97,9 @@ class SequenceShifter:
                     cur_ins = [n_final-1,1]
                     on_insert = True
 
-        if on_insert:
-            self.insertions.append(cur_ins)
+        # don't add C-term insert
+        #if on_insert:
+        #    self.insertions.append(cur_ins)
         self.final_len = n_final-1
 
     def orig_to_final(self,resnum):
@@ -98,7 +117,8 @@ class SequenceShifter:
         return self.final_len
 
     def shift_model_options(self,opts,offset=0):
-        """Return a new ModelOptions with adjusted sequences.
+        """Return a new ModelOptions with adjusted sequences
+        AND ADDED INSERTIONS!
         Doesn't copy symmetries"""
         ret = ModelOptions()
         rsse = ret.get_sses()
@@ -115,8 +135,7 @@ class SequenceShifter:
                 tmp.append([self.orig_to_final(h[0])+offset,
                             self.orig_to_final(h[1])+offset])
             rsse['sheets'].append(tmp)
-        for ins in opts.get_insertions():
-            rins.append([self.orig_to_final(ins[0])+offset,ins[1]])
+        ret.insertions = self.get_insertions()
         return ret
 
 
@@ -154,9 +173,6 @@ class ModelOptions:
     def get_sses(self):
         return self.sses
 
-    def add_inserts_from_shifter(self,ss):
-        self.insertions+=ss.get_insertions()
-
     def get_data(self):
         return {'sses':self.sses,
                 'insertions':self.insertions,
@@ -177,6 +193,29 @@ class ModelOptions:
 
     def get_symmetry_breaks(self):
         return self.symmetry_breaks
+
+    def append(self,mo,offset=0):
+        """Append another ModelOptions (sses and insertions only)
+        With optional offset."""
+        ret = ModelOptions()
+        for h in mo.get_sses()['helices']:
+            self.sses['helices'].append([h[0]+offset,
+                                    h[1]+offset])
+        for h in mo.get_sses()['loops']:
+            self.sses['loops'].append([h[0]+offset,
+                                  h[1]+offset])
+        for sheet in mo.get_sses()['sheets']:
+            tmp = []
+            for h in sheet:
+                tmp.append([h[0]+offset,
+                            h[1]+offset])
+            self.sses['sheets'].append(tmp)
+        for ins in mo.get_insertions():
+            self.insertions.append([ins[0]+offset,ins[1]])
+
+    def write(self,out_fn):
+        stream = file(out_fn,'w')
+        yaml.dump(self.get_data(),stream)
 
 class InsertionRemover:
     """Store a template and a target, remove insertions above certain size.

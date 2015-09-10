@@ -61,6 +61,7 @@ class TestInsertionRemover(unittest.TestCase):
         temp_aln = iremove.get_current_target_alignment()
         self.assertEqual(get_seq_from_aln(temp_aln,0),'ABCDEFGHKL')
         self.assertEqual(get_seq_from_aln(temp_aln,1),'ABC---GHKL')
+
     def test_pdb_adjust_deletion(self):
         """Test adjusting when you already have a partial deletion"""
         template  = 'EEFFIKQGPSSGNVSAQPEEDEEDLGIGGLTGKQLRELQDLRLIEEENMLAPSLK'
@@ -147,22 +148,28 @@ class TestInsertionRemover(unittest.TestCase):
         aln[0].code = 'TEMPLATE'
         aln[1].code = 'TARGET'
 
-        iremove = InsertionRemover(aln,2)
+        iremove = InsertionRemover(aln,1)
         aln_to_orig = iremove.get_current_target_alignment()
-        #self.assertEqual(get_seq_from_aln(temp_aln,0),'YABCYYYDEFYY')
-        #self.assertEqual(get_seq_from_aln(temp_aln,1),'YABC---DEFYY')
+
+        # the shifter is based on the alignment to original TARGET sequence
         ss = SequenceShifter(aln_to_orig)
         self.assertEqual(ss.orig_to_final(4),4)
         self.assertEqual(ss.orig_to_final(5),-1) # should get warning
         self.assertEqual(ss.orig_to_final(8),5)
         self.assertEqual(ss.get_insertions(),[[4,3]])
 
+        # now use SSEs and check they shift correctly
         mo = ModelOptions()
         mo.get_sses()['helices'].append([8,10])
-        mo.add_inserts_from_shifter(ss)
-        nmo = ss.shift_model_options(mo,offset=10)
-        self.assertEqual(nmo.get_sses()['helices'][0],[15,17])
-        self.assertEqual(nmo.get_insertions(),[[14,3]])
+        nmo = ss.shift_model_options(mo)
+        self.assertEqual(nmo.get_sses()['helices'][0],[5,7])
+        self.assertEqual(nmo.get_insertions(),[[4,3]])
+
+        # check mo append with offset
+        mo2 = ModelOptions()
+        mo2.append(nmo,offset=10)
+        self.assertEqual(mo2.get_sses()['helices'][0],[15,17])
+        self.assertEqual(mo2.get_insertions(),[[14,3]])
 
 if __name__=="__main__":
     unittest.main()
