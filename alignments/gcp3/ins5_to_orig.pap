@@ -1,0 +1,69 @@
+ _aln.pos             10        20        30        40        50        60
+ORIG_TARGET   MELEPTLFGIIEALAPQLLSQSHLQTFVSDVVNLLRSSTKSATQLGPLIDFYKLQSLDSPETTI 
+FINAL_TARGET  ---------------------------------------------------------------- 
+ _consrvd
+
+ _aln.pos         70        80        90       100       110       120
+ORIG_TARGET   MWHKIEKFLDALFGIQNTDDMVKYLSVFQSLLPSNYRAKIVQKSSGLNMENLANHEHLLSPVRA 
+FINAL_TARGET  ---------------------------------------------------------------- 
+ _consrvd
+
+ _aln.pos    130       140       150       160       170       180       190
+ORIG_TARGET   PSIYTEASFENMDRFSERRSMVSSPNRYVPSSTYSSVTLRQLSNPYYVNTIPEEDILKYVSYTL 
+FINAL_TARGET  ---------------------------------------------------PEEDILKYVSYTL 
+ _consrvd                                                        *************
+
+ _aln.pos          200       210       220       230       240       250
+ORIG_TARGET   LATTSALFPFDHEQIQIPSKIPNFESGLLHLIFEAGLLYQSLGYKVEKFRMLNISPMKKALIIE 
+FINAL_TARGET  LATTSALFPFDHEQIQIPSKIPNFESGLLHLIFEAGLLYQSLGYKVEKFRMLNISPMKKALIIE 
+ _consrvd     ****************************************************************
+
+ _aln.pos      260       270       280       290       300       310       320
+ORIG_TARGET   ISEELQNYTAFVNNLVSSGTVVSLKSLYREIYENIIRLRIYCRFTEHLEELSGDTFLIELNIFK 
+FINAL_TARGET  ISEELQNYTAFVNNLVSSGTVVSLKSLYREIYENIIRLRIYCRFTEHLEELSGDTFLIELNIFK 
+ _consrvd     ****************************************************************
+
+ _aln.pos            330       340       350       360       370       380
+ORIG_TARGET   SHGDLTIRKIATNLFNSMISLYYEYLMNWLTKGLLRATYGEFFIAENTDTNGTDDDFIYHIPIE 
+FINAL_TARGET  SHGDLTIRKIATNLFNSMISLYYEYLMNWLTKGLLRATYGEFFIAEN-----------YHIPIE 
+ _consrvd     ***********************************************           ******
+
+ _aln.pos        390       400       410       420       430       440
+ORIG_TARGET   FNQERVPAFIPKELAYKIFMIGKSYIFLEKYCKEVQWTNEFSKKYHVLYQSNSYRGISTNFFEI 
+FINAL_TARGET  FNQERVPAFIPKELAYKIFMIGKSYIFLEKYCKEVQWTNEFSKKYHVLYQSNSYRGISTNFFEI 
+ _consrvd     ****************************************************************
+
+ _aln.pos    450       460       470       480       490       500       510
+ORIG_TARGET   INDQYSEIVNHTNQILNQKFHYRDVVFALKNILLMGKSDFMDALIEKANDILATPSDSLPNYKL 
+FINAL_TARGET  INDQYSEIVNHTNQILNQKFHYRDVVFALKNILLMGKSDFMDALIEKANDILATPSDSLPNYKL 
+ _consrvd     ****************************************************************
+
+ _aln.pos          520       530       540       550       560       570
+ORIG_TARGET   TRVLQEAVQLSSLRHLMNSPRNSSVINGLDARVLDLGHGSVGWDVFTLDYILYPPLSLVLNVNR 
+FINAL_TARGET  TRVLQEAVQLSSLRHLMNSPRNSSVINGLDARVLDLGHGSVGWDVFTLDYILYPPLSLVLNVNR 
+ _consrvd     ****************************************************************
+
+ _aln.pos      580       590       600       610       620       630       640
+ORIG_TARGET   PFGRKEYLRIFNFLWRFKKNNYFYQKEMLKSNDIIRSFKKIRGYNPLIRDIINKLSRISILRTQ 
+FINAL_TARGET  PFGRKEYLRIFNFLWRFKKNNYFYQKEMLKSNDIIRSFK------------INKLSRISILRTQ 
+ _consrvd     ***************************************            *************
+
+ _aln.pos            650       660       670       680       690       700
+ORIG_TARGET   FQQFNSKMESYYLNCIIEENFKEMTRKLQRTENKSQNQFDLIRLNNGTIELNGILTPKAEVLTK 
+FINAL_TARGET  FQQFNSKMESYYLNCIIEENFKEMTRKLQRT--------------------------------- 
+ _consrvd     *******************************
+
+ _aln.pos        710       720       730       740       750       760
+ORIG_TARGET   SSSSKPQKHAIEKTLNIDELESVHNTFLTNILSHKLFATNTSEISVGDYSGQPYPTSLVLLLNS 
+FINAL_TARGET  --------------LNIDELESVHNTFLTNILSHKLFATNTSEISVGDYSGQPYPTSLVLLLNS 
+ _consrvd                   **************************************************
+
+ _aln.pos    770       780       790       800       810       820       830
+ORIG_TARGET   VYEFVKVYCNLNDIGYEIFIKMNLNDHEASNGLLGKFNTNLKEIVSQYKNFKDRLYIFRADLKN 
+FINAL_TARGET  VYEFVKVYCNLNDIG--------------SNGLLGKFNTNLKEIVSQYKNFKDRLYIFRADLKN 
+ _consrvd     ***************              ***********************************
+
+ _aln.pos          840
+ORIG_TARGET   DGDEELFLLSKSLR 
+FINAL_TARGET  DGDEELFLLSKSLR 
+ _consrvd     **************
