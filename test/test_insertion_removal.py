@@ -61,12 +61,47 @@ class TestInsertionRemover(unittest.TestCase):
         temp_aln = iremove.get_current_target_alignment()
         self.assertEqual(get_seq_from_aln(temp_aln,0),'ABCDEFGHKL')
         self.assertEqual(get_seq_from_aln(temp_aln,1),'ABC---GHKL')
+    def test_pdb_adjust_deletion(self):
+        """Test adjusting when you already have a partial deletion"""
+        template  = 'EEFFIKQGPSSGNVSAQPEEDEEDLGIGGLTGKQLRELQDLRLIEEENMLAPSLK'
+        target    = 'GEFFIAENTDTNG---------------------------------TDDDFIYHI'
+        env = environ()
+        aln = alignment(env)
+        aln.append_sequence(template)
+        aln.append_sequence(target)
+        aln[0].code='TEMP'
+        aln[1].code='TARG'
 
+        temp_orig = 'EEFFIKQGPSSGNVSAQPEEDEEDLGIGGLTGKQLRELQDLRLIEEENMLAPSLK'
+        temp_pdb  = 'EEFFIKQG--------------------------------------------SLK'
+        pdb_aln = alignment(env)
+        pdb_aln.append_sequence(temp_orig)
+        pdb_aln.append_sequence(temp_pdb)
+
+        # first just test the PDB part
+        ir1 = InsertionRemover(aln,1000)
+        ir1.limit_to_pdb(pdb_aln)
+        fix_aln = ir1.get_alignment()
+        seqs = get_temp_aln(fix_aln)
+        self.assertEqual(seqs['TEMP'],'EEFFIKQG-----------SLK')
+        self.assertEqual(seqs['TARG'],'GEFFIAENTDTNGTDDDFIYHI')
+
+        # now remove the insert
+        ir2 = InsertionRemover(aln,6)
+        ir2.limit_to_pdb(pdb_aln)
+        fix_aln = ir2.get_alignment()
+        seqs = get_temp_aln(fix_aln)
+        self.assertEqual(seqs['TEMP'],'EEFFIKQG-SLK')
+        self.assertEqual(seqs['TARG'],'GEFFIAEN/YHI')
+
+        #temp_aln = iremove.get_current_target_alignment()
+        #self.assertEqual(get_seq_from_aln(temp_aln,0),'ABCDEFGHKL')
+        #self.assertEqual(get_seq_from_aln(temp_aln,1),'ABC---GHKL')
 
     def test_real_problem(self):
         env = environ()
-        aln = alignment(env,file='test_aln.pir')
-        pdb_aln = alignment(env,file='test_pdblim.pir')
+        aln = alignment(env,file='input/test_aln.pir')
+        pdb_aln = alignment(env,file='input/test_pdblim.pir')
 
         iremove = InsertionRemover(aln,max_ins_len=5)
         iremove.limit_to_pdb(pdb_aln)
@@ -80,9 +115,9 @@ class TestInsertionRemover(unittest.TestCase):
 
     def test_real_sses(self):
         env = environ()
-        aln = alignment(env,file='test_aln.pir')
-        pdb_aln = alignment(env,file='test_pdblim.pir')
-        mo = ModelOptions('options.txt')
+        aln = alignment(env,file='input/test_aln.pir')
+        pdb_aln = alignment(env,file='input/test_pdblim.pir')
+        mo = ModelOptions('input/options.txt')
 
         sses = mo.get_sses()
         self.assertEqual(sses['helices'],[[56,67]])

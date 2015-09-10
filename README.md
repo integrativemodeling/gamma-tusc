@@ -14,19 +14,25 @@ This module creates models of the gamma tubulin small complex using MODELLER and
 ```
 
 ### Create a few types of alignments
-- "orig" alignments - no SSE additions
+"orig" alignments - no SSE additions
 ```
-> python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP2_YEAST 10000 alignments/gcp2/orig -p alignments/gcp4_pdblim.pir
-> python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP3_YEAST 10000 alignments/gcp3/orig -p alignments/gcp4_pdblim.pir
-```
-
-- "ins5" alignment: preserve requested SSEs, remove remaining insertions.
-```
-> python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP2_YEAST 5 alignments/gcp2/ins5 -p alignments/gcp4_pdblim.pir -s alignments/gcp2/GCP2.options -o alignments/gcp2/ins5_to_orig
-> python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP3_YEAST 5 alignments/gcp3/ins5 -p alignments/gcp4_pdblim.pir -s alignments/gcp3/GCP3.options -o alignments/gcp3/ins5_to_orig
+> python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP2_YEAST 10000 alignments/gcp2/orig
+> python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP3_YEAST 10000 alignments/gcp3/orig
 ```
 
-- the gtub alignment w/pdb and insertion removal but no SSEs
+#### Insertion removal with or without SSEs
+GCP2
+```
+> python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP2_YEAST 5 alignments/gcp2/ins5_orig -p alignments/gcp4_pdblim.pir
+> python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP2_YEAST 5 alignments/gcp2/ins5_sse -p alignments/gcp4_pdblim.pir -s alignments/gcp2/GCP2.options -o alignments/gcp2/ins5_to_orig
+```
+GCP3
+```
+> python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP3_YEAST 5 alignments/gcp3/ins5_orig -p alignments/gcp4_pdblim.pir
+> python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP3_YEAST 5 alignments/gcp3/ins5_sse -p alignments/gcp4_pdblim.pir -s alignments/gcp3/GCP3.options -o alignments/gcp3/ins5_to_orig
+```
+
+#### The gtub alignment w/pdb and insertion removal but no SSEs
 ```
 > python src/remove_insertions.py alignments/gtub_rp15_promals.fasta GTUB_HUMAN GTUB_YEAST 6 alignments/gtub/gtub_rp15_promals_ins6 -p alignments/gtub_pdblim.pir
 ```

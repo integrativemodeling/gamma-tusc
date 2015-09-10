@@ -36,6 +36,9 @@ def get_seqs_from_pir(aln_fn):
         cur_seq = ''
     return seqs
 
+#def get_seqs_from_fasta(aln_fn):
+
+
 def write_align(aln,prefix):
     aln.write(prefix+'.pir',alignment_format="PIR")
     aln.write(prefix+'.pap',alignment_format="PAP")
@@ -191,7 +194,6 @@ class InsertionRemover:
             self.targ = targ
             self.do_not_delete = False
             self.to_delete = False
-            self.pdb_aln = None
         def __repr__(self):
             return '%s%i %s%i'%(self.temp,self.ntemp_orig,self.targ,self.ntarg_orig)
 
@@ -204,6 +206,7 @@ class InsertionRemover:
         self.orig_aln = aln
         self.positions = []
         self.max_ins_len = max_ins_len
+        self.pdb_aln = None
         #self.nterm_buffer = nterm_buffer
         ntemp= 0
         ntarg = 0
@@ -251,16 +254,18 @@ class InsertionRemover:
         targ_seq = ''
         on_delete = False
         for npos,pos in enumerate(self.positions):
-            if not pos.to_delete:
-                if on_delete:
-                    targ_seq += '/'
-                if not (pos.temp=='-' and pos.targ=='-'):
-                    temp_seq += pos.temp
-                    targ_seq += pos.targ
-                on_delete = False
-            else:
+            if pos.temp=='-' and pos.targ=='-':
+                continue
+            if pos.to_delete:
                 if temp_seq!='':
                     on_delete = True
+            else:
+                if on_delete:
+                    targ_seq += '/'
+                temp_seq += pos.temp
+                targ_seq += pos.targ
+                on_delete = False
+
         aln = alignment(self.orig_aln.env)
         aln.append_sequence(temp_seq)
         aln.append_sequence(targ_seq)
@@ -304,13 +309,12 @@ class InsertionRemover:
         insertions = []
         for npos,pos in enumerate(self.positions):
             pos.to_delete = False
-            if pos.temp=='-' and not pos.do_not_delete and pos.targ!='-':
+            if pos.temp=='-' and pos.targ=='-':
+                continue
+            if pos.temp=='-' and not pos.do_not_delete:
                 cur_ins.append(npos)
             else:
                 if len(cur_ins)>self.max_ins_len:
-                    # keep a bit on the n terminus if requested
-                    #if cur_ins[0]==0 and self.nterm_buffer>0:
-                    #    cur_ins = cur_ins[0:len(cur_ins)-self.nterm_buffer]
                     insertions.append(cur_ins)
                     for nipos in cur_ins:
                         self.positions[nipos].to_delete = True
