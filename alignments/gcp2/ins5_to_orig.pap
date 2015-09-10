@@ -1,0 +1,64 @@
+ _aln.pos             10        20        30        40        50        60
+ORIG_TARGET   MEIKEVDDRAELLRYTNNIPLLGKLVNHQPLWSTNPKLKSFSLEKISAPDQRRVQEALVVKDLL 
+FINAL_TARGET  ------------------------------------------------------QEALVVKDLL 
+ _consrvd                                                           **********
+
+ _aln.pos         70        80        90       100       110       120
+ORIG_TARGET   NVLIGLEGTYIRYFNDYEPSDPETPIEFKIAKKMDPSFKTFSRRIVRYGKQYMILTRAYEKWSD 
+FINAL_TARGET  NVLIGLEGTYIRYFND---------IEFKIAKKMDPSFKTFSRRIVRYGKQYMILTRAYEKWSD 
+ _consrvd     ****************         ***************************************
+
+ _aln.pos    130       140       150       160       170       180       190
+ORIG_TARGET   TSFGMVLQRFAYEIRRFLEDVYLKTLVERLERDFNKVPNFSIRELEQIINETEVNKQMELLYNI 
+FINAL_TARGET  TSFGMVLQRFAYEIRRFLEDVYLKTLVERLERDFNKVPNFSIRELEQIINETEVNKQMELLYNI 
+ _consrvd     ****************************************************************
+
+ _aln.pos          200       210       220       230       240       250
+ORIG_TARGET   YEEIFREIEERRTNQSSQEDFNNFMDSMKNESSLHLRLMVAFDTTVYPVPKGGAILKIFQQKIL 
+FINAL_TARGET  YEEIFREIEERRT----------------------------------PVPKGGAILKIFQQKIL 
+ _consrvd     *************                                  *****************
+
+ _aln.pos      260       270       280       290       300       310       320
+ORIG_TARGET   ENLGDRSSVMFLKKLLNNISQDYCTMLYEWLTQGILNDPYQEFMTYDDLEGKTDNIFDTRDRAW 
+FINAL_TARGET  ENLGDRSSVMFLKKLLNNISQDYCTMLYEWLTQGILNDPYQEFMTYDD---------------W 
+ _consrvd     ************************************************               *
+
+ _aln.pos            330       340       350       360       370       380
+ORIG_TARGET   DTQYFIRKDVLLRDCDSEEDKNLLFKMLRTGILLKVVRASLQIPTIPSNSSDITIQEINDFADL 
+FINAL_TARGET  DTQYFIRKDVLLRDCDSEEDKNLLFKMLRTGILLKVVRASLQIPTIPSNSSDITIQEINDFADL 
+ _consrvd     ****************************************************************
+
+ _aln.pos        390       400       410       420       430       440
+ORIG_TARGET   MEGSNLELYVDKCYSRANEIFLKLFFQGYDLINVLKHLQQIFLGYQSGHNVLKFLTKNMGELTK 
+FINAL_TARGET  MEGSNLELYVDKCYSRANEIFLKLFFQGYDLINVLKHLQQIFLGYQSGHNVLKFLTKNMGELTK 
+ _consrvd     ****************************************************************
+
+ _aln.pos    450       460       470       480       490       500       510
+ORIG_TARGET   HYRNDNNANYDKLLQNFELERQSENPNNLMRQLLMIQFDTETLPQVLSHYLQIYPEVPENNSAN 
+FINAL_TARGET  HYRNDNNANYDKLLQNFELERQSENPNNLMRQLLMIQFDTET---------------------- 
+ _consrvd     ******************************************
+
+ _aln.pos          520       530       540       550       560       570
+ORIG_TARGET   DDSDPLMHANNFKNMNAILFDELSKERTGAYHGSNLELYTPKSAIYHLKFDINIPYPLNIIISR 
+FINAL_TARGET  -----------------------------------------KSAIYHLKFDINIPYPLNIIISR 
+ _consrvd                                              ***********************
+
+ _aln.pos      580       590       600       610       620       630       640
+ORIG_TARGET   TCMIKYQIILRYQLVLQYHSRLLDETWMDLNKTPSWKYRGYSHTVKRRIVRATRVLHAKMNHFI 
+FINAL_TARGET  TCMIKYQIILRYQLVLQYHSRLLDETWMDLNKTPSWKY--------RRIVRATRVLHAKMNHFI 
+ _consrvd     **************************************        ******************
+
+ _aln.pos            650       660       670       680       690       700
+ORIG_TARGET   KTIMEYFNQNVIDKEVYSLEKCYRNPTLAVAIQNELEGGLTNIMTNRCLSDLIPLQLQIFDIVY 
+FINAL_TARGET  KTIMEYFNQNVIDKEVYSLEKCYRNPTLAVAIQNELEGGLTNIMTNRCLSDLIPLQLQIFDIVY 
+ _consrvd     ****************************************************************
+
+ _aln.pos        710       720       730       740       750       760
+ORIG_TARGET   KFCKFIKSMRAKLCQLDPVLYEKHKSGMMKTLNEGYRTNNGGQEDVGYQEDAALELIQKLIEYI 
+FINAL_TARGET  KFCKFIKSMRAKL------------------------------------EDAALELIQKLIEYI 
+ _consrvd     *************                                    ***************
+
+ _aln.pos    770       780       790       800       810       820
+ORIG_TARGET   SNASSIFRKCLINFTQELSTEKFDFYDSSSVDAAGIERVLYSIVPPRSASASSQR 
+FINAL_TARGET  SNASSIFRKCLINFTQELSTEKFDFYDSSSVD------VLY-------------- 
+ _consrvd     ********************************      ***
