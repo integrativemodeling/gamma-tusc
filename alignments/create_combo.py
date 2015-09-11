@@ -21,7 +21,7 @@ mo2 = ModelOptions('gcp2/GCP2.options')
 mo3 = ModelOptions('gcp3/GCP3.options')
 aln2o = alignment(env,file='gcp2/ins5_to_orig.pir')
 aln3o = alignment(env,file='gcp3/ins5_to_orig.pir')
-out_dir = 'combo/ins5/'
+out_dir = 'combo/'
 
 ### create alignment
 aln_combo = alignment(env)
@@ -38,7 +38,7 @@ aln_combo[0].prottyp = 'structureX'
 aln_combo[0].source = "HUMAN"
 aln_combo[1].name = "TARGET"
 aln_combo[1].code = "TARGET"
-write_align(aln_combo,'combo/ins5')
+write_align(aln_combo,out_dir+'ins5')
 
 ### Combine ModelOptions files
 # create shifters
@@ -58,11 +58,14 @@ len2 = get_seq_len(s2['GCP2_YEAST'])
 len3 = get_seq_len(s3['GCP3_YEAST'])
 lenG = get_seq_len(sG['GTUB_YEAST'])
 lenS = get_seq_len(s110['Spc110'])
+print 'len2',len2,'len3',len3,'lenG',lenG,'lenS',lenS
 moF = ModelOptions()
 moF.append(mo2s)
 moF.append(mo3s,len2)
-#moF.append(mo2s,len2+len3+2*lenG+2*lenS)
-#moF.append(mo3s,2*len2+len3+2*lenG+2*lenS)
-moF.write(out_dir+'ins5.options')
+moF.append(mo2s,len2+len3+2*lenG+2*lenS)
+moF.append(mo3s,2*len2+len3+2*lenG+2*lenS)
 
-# add symmetries to MO
+# add symmetries to MO and write
+lenGTUSC = len2+len3+2*lenG+2*lenS
+moF.symmetries = [[[1,lenGTUSC],[lenGTUSC+1,lenGTUSC*2]]]
+moF.write(out_dir+'ins5.options')

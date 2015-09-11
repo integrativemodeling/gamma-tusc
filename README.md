@@ -25,11 +25,13 @@ GCP2
 ```
 > python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP2_YEAST 5 alignments/gcp2/ins5_orig -p alignments/gcp4_pdblim.pir
 > python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP2_YEAST 5 alignments/gcp2/ins5_sse -p alignments/gcp4_pdblim.pir -s alignments/gcp2/GCP2.options -o alignments/gcp2/ins5_to_orig
+
 ```
 GCP3
 ```
 > python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP3_YEAST 5 alignments/gcp3/ins5_orig -p alignments/gcp4_pdblim.pir
 > python src/remove_insertions.py alignments/TUBGCP_promals.fasta GCP4_HUMAN GCP3_YEAST 5 alignments/gcp3/ins5_sse -p alignments/gcp4_pdblim.pir -s alignments/gcp3/GCP3.options -o alignments/gcp3/ins5_to_orig
+
 ```
 
 #### The gtub alignment w/pdb and insertion removal but no SSEs
@@ -38,19 +40,17 @@ GCP3
 ```
 
 ### Combine the various alignments to setup modeling
+From the alignment directory, call this "ad hoc" script to combine alignments and options files, adjusting numbering for everything.
 ```
-> create_combo.py
+> python create_combo.py
 ```
 
 ## Modeling
 ### Homology modeling with MODELLER
-- create a ModelOptions file for modeller containing:
-  - insertion points and lengths, for creating distance restraints
-  - symmetry breakpoints
-  - domain restraints (if g-tubulin?)
-  - all SSEs
-  -(use SequenceShifter to help this out!)
-- build model
+Back to the root directory, call model.py to start building models
+```
+> python src/model.py alignments/combo/ins5.pir 1 models/closed_ins5/ -d data/ -s alignments/combo/ins5.options
+```
 
 ### EM flexible fitting with MDFF
 - fixing chain names and res indexes. adding ytubulin + spc110.

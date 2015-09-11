@@ -34,10 +34,10 @@ class MyModel(automodel): #dope_loopmodel):
     sym_copies=[]
     sses=[]
 
-    def set_data(self,inserts=None,sses=None,sym_pairs=None):
-        self.inserts=inserts
-        self.sses=sses
-        self.sym_pairs=sym_pairs
+    def set_data(self,inserts=[],sses=[],sym_pairs=[]):
+        self.inserts = inserts
+        self.sses = sses
+        self.sym_pairs = sym_pairs
 
     def special_restraints(self,aln):
         rsr = self.restraints
@@ -45,49 +45,47 @@ class MyModel(automodel): #dope_loopmodel):
         res = self.residues
 
         ### adding sses
-        if not self.sses is None:
-            for h in self.sses['helices']:
-                print 'helix',h,''.join(res[r].code for r in xrange(h[0]-1,h[1]))
-                rsr.add(secondary_structure.alpha(self.residue_range(h[0]-1,h[1]-1)))
+        for h in self.sses['helices']:
+            print 'helix',h,''.join(res[r].code for r in xrange(h[0]-1,h[1]))
+            rsr.add(secondary_structure.alpha(self.residue_range(h[0]-1,h[1]-1)))
 
-            for sts in self.sses['sheets']:
-                ends=[]
-                for s in sts:
-                    start=s[0]-1
-                    stop=s[1]-1
-                    sstrand=''.join([res[sss].code for sss in range(start,stop+1)])
-                    print 'adding strand',start,sstrand
-                    rsr.add(secondary_structure.strand(self.residue_range(start,stop)))
-                    ends+=[start,stop]
-                sslen=ends[1]-ends[0]+1
-                print 'adding sheet of len',sslen
-                print 'start',res[ends[0]].code,res[ends[0]].atoms['N']
-                print 'stop',res[ends[-1]].code,res[ends[-1]].atoms['O']
-                rsr.add(secondary_structure.sheet(res[ends[0]].atoms['N'],
-                                                  res[ends[-1]].atoms['O'],
-                                                  sheet_h_bonds=-1*sslen))
+        for sts in self.sses['sheets']:
+            ends=[]
+            for s in sts:
+                start=s[0]-1
+                stop=s[1]-1
+                sstrand=''.join([res[sss].code for sss in range(start,stop+1)])
+                print 'adding strand',start,sstrand
+                rsr.add(secondary_structure.strand(self.residue_range(start,stop)))
+                ends+=[start,stop]
+            sslen=ends[1]-ends[0]+1
+            print 'adding sheet of len',sslen
+            print 'start',res[ends[0]].code,res[ends[0]].atoms['N']
+            print 'stop',res[ends[-1]].code,res[ends[-1]].atoms['O']
+            rsr.add(secondary_structure.sheet(res[ends[0]].atoms['N'],
+                                              res[ends[-1]].atoms['O'],
+                                              sheet_h_bonds=-1*sslen))
 
         ### adding distance restraint over inserts
-        if not self.inserts is None:
-            for ins in self.inserts:
-                start,ilen=ins
-                dist=ilen*3.5 #IMP.multifit.get_approximated_radius(ilen)
-                print 'creating insert restraint from',res[start-1],'to',res[start],'dist',dist
-                rsr.add(forms.upper_bound(group=physical.xy_distance,
-                                          feature=features.distance(res[start-1].atoms['CA'],
-                                                                    res[start].atoms['CA']),
-                                          mean=dist, stdev=0.1))
+        for ins in self.inserts:
+            start,ilen=ins
+            dist=ilen*3.5 #IMP.multifit.get_approximated_radius(ilen)
+            print 'creating insert restraint from',res[start-1],'to',res[start],'dist',dist
+            rsr.add(forms.upper_bound(group=physical.xy_distance,
+                                      feature=features.distance(res[start-1].atoms['CA'],
+                                                                res[start].atoms['CA']),
+                                      mean=dist, stdev=0.1))
 
         ### adding symmetry restraint
-        if not self.sym_pairs is None:
-            s1=selection(self.residue_range(self.sym_pairs[0][0],
-                                            self.sym_pairs[0][1])).only_atom_types('CA')
-            s2=selection(self.residue_range(self.sym_pairs[1][0],
-                                            self.sym_pairs[1][1])).only_atom_types('CA')
-            print ''.join([r.code for r in self.residue_range(self.sym_pairs[0][0],self.sym_pairs[0][1])])
-            print ''.join([r.code for r in self.residue_range(self.sym_pairs[1][0],self.sym_pairs[1][1])])
+        for spair in self.sym_pairs:
+            s1=selection(self.residue_range(spair[0][0],
+                                            spair[0][1])).only_atom_types('CA')
+            s2=selection(self.residue_range(spair[1][0],
+                                            spair[1][1])).only_atom_types('CA')
+            print ''.join([r.code for r in self.residue_range(spair[0][0],spair[0][1])])
+            print ''.join([r.code for r in self.residue_range(spair[1][0],spair[1][1])])
             self.restraints.symmetry.append(symmetry(s1,s2,1.0))
-        else:
+        if self.sym_pairs==[]:
             self.restraints.symmetry.report(1.0)
 
 
@@ -110,18 +108,15 @@ def run(env=None):
         env.io.atom_files_directory.append(atom_dir)
 
     ### read in extra data
-    sses=None
-    symmetry_pairs=None
-    inserts=None
     if options.options_fn!='':
-        mo = sequence_tools.ModelOptions(options.options_fn)
-        if options.no_restrain_beta:
-            mo._data['sses']['sheets'] = []
-        sses = mo.get_sses()
-    #if options.symmetry_pairs!='':
-    #    symmetry_pairs=[map(int,sp.split(':')) for sp in options.symmetry_pairs.split(',')]
-    #if options.ins_fn!='':
-    #    inserts=tools.parse_insert_file(options.ins_fn)
+        sses = []
+        if options.options_fn!='':
+            mo = sequence_tools.ModelOptions(options.options_fn)
+            if options.no_restrain_beta:
+                mo._data['sses']['sheets'] = []
+            sses = mo.get_sses()
+        symmetry_pairs = [] #mo.get_symmetries() #disabling for now, probably not needed
+        inserts = mo.get_insertions()
 
     ### create model, passing it various data
     a0 = alignment(env,file=aln_fn)

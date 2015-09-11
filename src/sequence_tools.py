@@ -12,12 +12,14 @@ def get_seq_from_aln(aln,seqnum):
 
 def get_seqs_from_pir(aln_fn):
     """Manually retrieve exact sequences from alignment file.
-    Returns dictionary, keys are template codes
+    Returns dictionary, keys are template codes.
+    REMOVES GAPS CORRESPONDING TO INSERTS. warning: only checks for 2 seqs
     """
     inf = open(aln_fn)
     seqs = {}
     cur_seq = ''
     start_seq = False
+    seq_names = []
     for l in inf:
         if l[0]=='>':
             if cur_seq!='':
@@ -25,6 +27,7 @@ def get_seqs_from_pir(aln_fn):
                 cur_seq = ''
             seqname = l.strip('\n')[4:]
             start_seq = True
+            seq_names.append(seqname)
             continue
         if start_seq:
             start_seq = False
@@ -34,6 +37,16 @@ def get_seqs_from_pir(aln_fn):
     if cur_seq!='':
         seqs[seqname] = cur_seq.strip('*')
         cur_seq = ''
+
+    # final removal of extra gaps at chain breaks
+    s0final = []
+    s1final = []
+    for s0,s1 in zip(seqs[seq_names[0]],seqs[seq_names[1]]):
+        s1final.append(s1)
+        if s1!='/':
+            s0final.append(s0)
+    seqs[seq_names[0]] = ''.join(s0final)
+    seqs[seq_names[1]] = ''.join(s1final)
     return seqs
 
 def get_seqs_from_fasta(aln_fn):
@@ -169,7 +182,14 @@ class ModelOptions:
             for cat in self.sses:
                 if cat in self._data['sses'] and self._data['sses'][cat] is not None:
                     self.sses[cat]+=self._data['sses'][cat]
-
+        if 'insertions' in self._data:
+            self.insertions = self._data['insertions']
+        if 'symmetries' in self._data:
+            self.symmetries = self._data['symmetries']
+            #for sym_group in self.data_['symmetries']:
+            #    tmp = []
+            #    for pair in sym_group:
+            #        tmp.append(pair
     def get_sses(self):
         return self.sses
 
@@ -191,8 +211,8 @@ class ModelOptions:
     def get_insertions(self):
         return self.insertions
 
-    def get_symmetry_breaks(self):
-        return self.symmetry_breaks
+    def get_symmetries(self):
+        return self.symmetries
 
     def append(self,mo,offset=0):
         """Append another ModelOptions (sses and insertions only)
