@@ -66,11 +66,7 @@ Back to the root directory, call model.py to start building models
 - setting up best models
 
 
-## Some useful classes defined in the tools file
-SequenceShifter:
-- __init__(): read in an alignment-to-orig file.
-- get_adjusted(raw sequence spec): return some sequence as an adjusted sequence
-ModelOptions:
-- just store SSE info, insertions, symmetry, domain restraints
-- access functions like get_sses, get_symmetry_breaks, ...
-- read/write command (possibly use YAML?)
+## Some useful classes defined in sequence_tools.py
+- SequenceShifter: input an alignment of a "final" modeling sequence to the raw original one. Then use this class to shift sequence numbering (from original to final).
+- ModelOptions: store, read, and write options for modeling, including secondary structure restraints, insertions, and symmetry.
+- InsertionRemover: input an alignment and this class will help you remove insertions above a specified length. Can convert columns to insertions when the PDB file is missing residues, and convert insertions back to non-insertions if they're on the SSE modeling "whitelist"
