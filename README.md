@@ -36,7 +36,7 @@ GCP3
 
 #### The gtub alignment w/pdb and insertion removal but no SSEs
 ```
-> python src/remove_insertions.py alignments/gtub_rp15_promals.fasta GTUB_HUMAN GTUB_YEAST 6 alignments/gtub/gtub_rp15_promals_ins6 -p alignments/gtub_pdblim.pir
+> python src/remove_insertions.py alignments/gtub_rp15_promals.fasta GTUB_HUMAN GTUB_YEAST 6 alignments/gtub/gtub_rp15_promals_ins6 -p alignments/gtub_pdblim.pir -o alignments/gtub/ins6_to_orig
 ```
 
 ### Combine the various alignments to setup modeling
@@ -50,6 +50,10 @@ From the alignment directory, call this "ad hoc" script to combine alignments an
 Back to the root directory, call model.py to start building models
 ```
 > python src/model.py alignments/combo/ins5.pir 1 models/closed_ins5/ -d data/ -s alignments/combo/ins5.options
+```
+Clean up the model by restoring correct chain names and residue indexes
+```
+> ~/imp_fast_clean/setup_environment.sh python src/fix_model.py -i models/closed_ins5/TARGET.B99990001.pdb -o models/closed_ins5/fixed.pdb -f alignments/gcp2/ins5_to_orig.pir alignments/gcp3/ins5_to_orig.pir alignments/gtub/ins6_to_orig.pir data/spc110_fragment.fasta -n 123344123344
 ```
 
 ### EM flexible fitting with MDFF
