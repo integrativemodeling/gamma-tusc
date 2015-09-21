@@ -7,11 +7,9 @@ import string
 from optparse import OptionParser
 import sequence_tools
 import random
-import IMP
-import IMP.multifit
 
 def parse_args():
-    usage = """usage %prog [options] <align_fn> <nmodels> <out_dir>
+    usage = """usage %prog [options] <align_fn> <nmodels>
     """
     parser=OptionParser(usage)
     parser.add_option("-l","--nloops",dest="nloops",default=0,type='int',
@@ -24,8 +22,10 @@ def parse_args():
                       default=False,help="Flag if you want to ignore betas in the SSE file")
     parser.add_option("-r","--random_seed",dest="random_seed",default=0,type='int',
                       help="random seed. if 0 will pick one at random")
+    parser.add_option("-o","--out_dir",dest="out_dir",default='',
+                      help="write files to this directory instead of current working one")
     (options, args) = parser.parse_args()
-    if len(args) != 3:
+    if len(args) != 2:
         parser.error("incorrect number of arguments "+str(len(args))+" " + str(args))
     return [options,args]
 
@@ -91,7 +91,7 @@ class MyModel(loopmodel): #dope_loopmodel):
 
 def run(env=None):
     options,args=parse_args()
-    aln_fn,nmodels,out_dir=args
+    aln_fn,nmodels=args
 
     ### Setup
     if options.random_seed==0:
@@ -99,7 +99,7 @@ def run(env=None):
     print 'using random seed',random_seed
     env = environ(rand_seed=random_seed)
     aln_fn = os.path.abspath(aln_fn)
-    out_dir = os.path.abspath(out_dir)
+
     nmodels = int(nmodels)
     env.libs.topology.read(file='$(LIB)/top_heav.lib')
     env.libs.parameters.read(file='$(LIB)/par.lib')
@@ -128,19 +128,23 @@ def run(env=None):
     a.set_data(inserts,sses,symmetry_pairs)
 
     ### perform modeling
-    owd = os.getcwd()
-    print 'starting in',owd
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
-    os.chdir(out_dir)
-    print 'working from',os.getcwd()
+    if options.out_dir!='':
+        out_dir = os.path.abspath(options.out_dir)
+        owd = os.getcwd()
+        print 'starting in',owd
+        if not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+        os.chdir(out_dir)
+        print 'working from',os.getcwd()
     if options.nloops>0:
         a.md_level=None
         a.loop.starting_model=1
         a.loop.ending_model=options.nloops
         a.loop.md_level=refine.very_fast
     a.make()
-    os.chdir(owd)
+
+    if options.out_dir!='':
+        os.chdir(owd)
 
 if __name__=="__main__":
     run()
