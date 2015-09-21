@@ -60,5 +60,5 @@ FINAL_TARGET  KFCKFIKSMRAKL------------------------------------EDAALELIQKLIEYI
 
  _aln.pos    770       780       790       800       810       820
 ORIG_TARGET   SNASSIFRKCLINFTQELSTEKFDFYDSSSVDAAGIERVLYSIVPPRSASASSQR 
-FINAL_TARGET  SNASSIFRKCLINFTQELSTEKFDFYDSSSVD------VLY-------------- 
- _consrvd     ********************************      ***
+FINAL_TARGET  SNASSIFRKCLINFTQELSTEKFDFYDSSSVD----------------------- 
+ _consrvd     ********************************

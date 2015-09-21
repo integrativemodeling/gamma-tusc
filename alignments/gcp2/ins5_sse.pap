@@ -44,6 +44,6 @@ GCP2_YEAST  -DLIPLQLQIFDIVYKFCKFIKSMRAKL/EDAALELIQKLIEYISNASSIFRKCLINFTQEL-STE
  _consrvd            * *    **         *           *    *  **   * *
 
  _aln.pos      600
-GCP4_HUMAN  LAQLLLRLDYN-KYY 
-GCP2_YEAST  KFDFYDSSSVD/VLY 
- _consrvd                 *
+GCP4_HUMAN  LAQLLLRLDYN 
+GCP2_YEAST  KFDFYDSSSVD 
+ _consrvd
