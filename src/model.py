@@ -29,7 +29,7 @@ def parse_args():
         parser.error("incorrect number of arguments "+str(len(args))+" " + str(args))
     return [options,args]
 
-class MyModel(automodel): #dope_loopmodel):
+class MyModel(loopmodel): #dope_loopmodel):
     breaks=[]
     sym_copies=[]
     sses=[]
@@ -135,10 +135,10 @@ def run(env=None):
     os.chdir(out_dir)
     print 'working from',os.getcwd()
     if options.nloops>0:
-        #a.md_level=None
+        a.md_level=None
         a.loop.starting_model=1
         a.loop.ending_model=options.nloops
-        #a.loop.md_level=refine.very_fast
+        a.loop.md_level=refine.very_fast
     a.make()
     os.chdir(owd)
 
