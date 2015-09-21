@@ -1,4 +1,5 @@
 from modeller import *
+import string
 import yaml
 
 def get_seq_from_aln(aln,seqnum):
@@ -213,7 +214,7 @@ class ModelOptions:
                 all_res|=set(range(segment[0],segment[1]+1))
         return all_res
 
-    def get_force_insertions(self):
+    def get_do_not_model(self):
         all_res = set()
         for seg in self._data['do_not_model']:
             all_res|=set(range(seg[0],seg[1]+1))
@@ -264,7 +265,7 @@ class InsertionRemover:
             self.targ = targ
             self.do_not_delete = False
             self.to_delete = False
-            self.force_insert = False #even if target is not '-', pretend it is
+            self.do_not_model = False #force into deletion
         def __repr__(self):
             return '%s%i %s%i'%(self.temp,self.ntemp_orig,self.targ,self.ntarg_orig)
 
@@ -310,7 +311,7 @@ class InsertionRemover:
         """For all SSEs, mark as non-insertion.
         Must provide model_options object, read with ModelOptions.read()"""
         self._set_do_not_delete(model_options.get_all_sse_residues())
-        self._set_force_insert(model_options.get_force_insertions())
+        self._set_do_not_model(model_options.get_do_not_model())
         self._update_indexes()
 
     def get_insertions(self):
@@ -322,22 +323,39 @@ class InsertionRemover:
         This should ignore insertions at the beginning and end.
         """
         insertions = self._update_to_delete()
-        temp_seq = ''
-        targ_seq = ''
+        temp_seq = []
+        targ_seq = []
         on_delete = False
         for npos,pos in enumerate(self.positions):
             if pos.temp=='-' and pos.targ=='-':
                 continue
             if pos.to_delete:
-                if temp_seq!='':
+                if temp_seq!=[]:
                     on_delete = True
             else:
+                # first add a slash if end of insertion
                 if on_delete:
-                    targ_seq += '/'
-                temp_seq += pos.temp
-                targ_seq += pos.targ
+                    targ_seq.append('/')
+
+                # now add this column
+                temp_seq.append(pos.temp)
+                if pos.do_not_model:
+                    targ_seq.append('-')
+                else:
+                    targ_seq.append(pos.targ)
                 on_delete = False
 
+        # a bit of a hack: must remove any dangling breaks
+        n = len(targ_seq)-1
+        while targ_seq[n] not in string.ascii_uppercase:
+            if targ_seq[n]=='/':
+                targ_seq[n]='-'
+            n -= 1
+
+        targ_seq = ''.join(targ_seq)
+        temp_seq = ''.join(temp_seq)
+        print 'TEMP',temp_seq[-10:]
+        print 'TARG',targ_seq[-10:]
         aln = alignment(self.orig_aln.env)
         aln.append_sequence(temp_seq)
         aln.append_sequence(targ_seq)
@@ -361,12 +379,14 @@ class InsertionRemover:
         orig_target = []
         new_target = []
         for pos in self.positions:
-            if pos.targ!='-':
+            if pos.targ=='-':
+                pass
+            else:
                 orig_target.append(pos.targ)
-                if not pos.to_delete:
-                    new_target.append(pos.targ)
-                else:
+                if pos.to_delete or pos.do_not_model:
                     new_target.append('-')
+                else:
+                    new_target.append(pos.targ)
         new_aln = alignment(self.orig_aln.env)
         new_aln.append_sequence(''.join(orig_target))
         new_aln.append_sequence(''.join(new_target))
@@ -383,7 +403,7 @@ class InsertionRemover:
             pos.to_delete = False
             if pos.temp=='-' and pos.targ=='-':
                 continue
-            if (pos.temp=='-' or pos.force_insert) and not pos.do_not_delete:
+            if pos.temp=='-' and not pos.do_not_delete:
                 cur_ins.append(npos)
             else:
                 if len(cur_ins)>self.max_ins_len:
@@ -397,10 +417,10 @@ class InsertionRemover:
                 self.positions[nipos].to_delete = True
         return insertions
 
-    def _set_force_insert(self,target_indexes):
+    def _set_do_not_model(self,target_indexes):
         for pos in self.positions:
             if pos.ntarg_orig in target_indexes:
-                pos.force_insert = True
+                pos.do_not_model = True
 
     def _update_indexes(self):
         """Based on current sequences, update indexes"""
