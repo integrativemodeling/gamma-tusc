@@ -62,9 +62,12 @@ Clean up the model by restoring correct chain names and residue indexes
 - run cleanup files
 
 ## Analysis
-- finding best models
-- calculating RMSF
-
+#### finding best models
+#### calculating RMSF
+#### calculating local similarity
+```
+~/imp_fast_clean/setup_environment.sh python src/calc_local_similarity.py key_models/closed.pdb key_models/open.pdb BDGI local_scores/closed_d6_n2.txt -d 6
+```
 ## Open state fitting
 - setting up best models
 
