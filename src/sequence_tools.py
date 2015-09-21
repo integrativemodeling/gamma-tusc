@@ -155,10 +155,11 @@ class SequenceShifter:
 
 class ModelOptions:
     """A class to store some options for modelling.
-    Allowed info: sses, insertions, symmetries
+    Allowed info: sses, insertions, symmetries, molecule_chain_breaks
     Allowed sses: helices (lists), sheets (list of lists), loops (lists)
     Allowed insertions: [ [ins position,length] ... ]
     Allowed symmetries: [ [range1,range2], [range3,range4] ] where each range is a symmetry copy
+    The chain breaks are for the protein components! Basically for fixing the chain IDs
     """
     def __init__(self,fn=''):
         self.sses = {'helices':[],
@@ -166,11 +167,12 @@ class ModelOptions:
                      'loops':[]}
         self.insertions = []
         self.symmetries = []
+        self.do_not_model = []
         if fn!='':
             self.read(fn)
 
     def read(self,fn):
-        cats = set(['sses','insertions','symmetries'])
+        cats = set(['sses','insertions','symmetries','do_not_model'])
         sse_cats = set(['helices','sheets','loops'])
         inf = open(fn,'r')
         self._data = yaml.load(inf)
@@ -190,13 +192,16 @@ class ModelOptions:
             #    tmp = []
             #    for pair in sym_group:
             #        tmp.append(pair
+        if 'do_not_model' in self._data:
+            self.do_not_model = self._data['do_not_model']
     def get_sses(self):
         return self.sses
 
     def get_data(self):
         return {'sses':self.sses,
                 'insertions':self.insertions,
-                'symmetries':self.symmetries}
+                'symmetries':self.symmetries,
+                'do_not_model':self.do_not_model}
 
     def get_all_sse_residues(self):
         """Return all SSE residues in a flat set"""
@@ -206,6 +211,12 @@ class ModelOptions:
         for sheet in self.sses['sheets']:
             for segment in sheet:
                 all_res|=set(range(segment[0],segment[1]+1))
+        return all_res
+
+    def get_force_insertions(self):
+        all_res = set()
+        for seg in self._data['do_not_model']:
+            all_res|=set(range(seg[0],seg[1]+1))
         return all_res
 
     def get_insertions(self):
@@ -253,6 +264,7 @@ class InsertionRemover:
             self.targ = targ
             self.do_not_delete = False
             self.to_delete = False
+            self.force_insert = False #even if target is not '-', pretend it is
         def __repr__(self):
             return '%s%i %s%i'%(self.temp,self.ntemp_orig,self.targ,self.ntarg_orig)
 
@@ -298,6 +310,7 @@ class InsertionRemover:
         """For all SSEs, mark as non-insertion.
         Must provide model_options object, read with ModelOptions.read()"""
         self._set_do_not_delete(model_options.get_all_sse_residues())
+        self._set_force_insert(model_options.get_force_insertions())
         self._update_indexes()
 
     def get_insertions(self):
@@ -370,7 +383,7 @@ class InsertionRemover:
             pos.to_delete = False
             if pos.temp=='-' and pos.targ=='-':
                 continue
-            if pos.temp=='-' and not pos.do_not_delete:
+            if (pos.temp=='-' or pos.force_insert) and not pos.do_not_delete:
                 cur_ins.append(npos)
             else:
                 if len(cur_ins)>self.max_ins_len:
@@ -383,6 +396,11 @@ class InsertionRemover:
             for nipos in cur_ins:
                 self.positions[nipos].to_delete = True
         return insertions
+
+    def _set_force_insert(self,target_indexes):
+        for pos in self.positions:
+            if pos.ntarg_orig in target_indexes:
+                pos.force_insert = True
 
     def _update_indexes(self):
         """Based on current sequences, update indexes"""
