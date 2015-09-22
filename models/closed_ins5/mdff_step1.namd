@@ -1,0 +1,45 @@
+###  Docking -- Step 1
+
+set PSFFILE model/tusc_autopsf.psf
+set PDBFILE model/tusc_autopsf.pdb
+set GRIDPDB model/tusc_autopsf-grid.pdb
+set DIEL 80
+set SCALING_1_4 1.0
+set ITEMP 300
+set FTEMP 300
+set GRIDFILE data/ringmasked_crop-grid.dx
+set GSCALE 1.0
+set EXTRAB {model/tusc-extrabonds.txt model/tusc-extrabonds-cispeptide.txt model/tusc-extrabonds-chirality.txt}
+set CONSPDB 0
+set FIXPDB  0
+
+set OUTPUTNAME mdff_step1
+
+set TS 200000
+set MS 2000
+
+set MARGIN 0
+
+symmetryRestraints on
+symmetryfile model/sym.pdb
+symmetryk 2500
+symmetryMatrixFile data/ring-matrices.txt
+symmetryfirststep 2001
+symmetryfirstfullstep 202000
+
+####################################
+
+structure $PSFFILE
+coordinates $PDBFILE
+
+paraTypeCharmm on
+parameters data/par_all27_prot_lipid_na.inp
+
+if {[info exists INPUTNAME]} {
+  BinVelocities $INPUTNAME.restart.vel
+  BinCoordinates $INPUTNAME.restart.coor
+} else {
+  temperature $ITEMP
+}
+
+source data/mdff_template.namd
