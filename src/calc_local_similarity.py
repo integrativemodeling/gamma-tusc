@@ -91,8 +91,8 @@ def run():
             ball1 = nn1.get_in_ball(v1,options.dist)
 
             # create alignment along backbone and transform
-            bb1 = IMP.atom.Selection(mh1,chain_id=this_chain,residue_indexes=[this_res-1,this_res,this_res+1]).get_selected_particles()
-            bb2 = IMP.atom.Selection(mh2,chain_id=this_chain,residue_indexes=[this_res-1,this_res,this_res+1]).get_selected_particles()
+            bb1 = IMP.atom.Selection(mh1,chain_id=this_chain,residue_indexes=[this_res-2,this_res,this_res+2]).get_selected_particles()
+            bb2 = IMP.atom.Selection(mh2,chain_id=this_chain,residue_indexes=[this_res-2,this_res,this_res+2]).get_selected_particles()
             trans = IMP.core.get_transformation_aligning_first_to_second(bb1,bb2)
             IMP.core.transform(rb1,trans)
 

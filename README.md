@@ -48,7 +48,7 @@ From the alignment directory, call this "ad hoc" script to combine alignments an
 #### Homology modeling with MODELLER
 Back to the root directory, call model.py to start building models.
 ```
-> python src/model.py alignments/combo/ins5.pir 1 models/closed_ins5/ -d data/ -s alignments/combo/ins5.options
+> python src/model.py alignments/combo/ins5.pir 1 models/closed_ins5/ -d data/ -s alignments/combo/ins5.options -l 1
 ```
 Clean up the model by restoring correct chain names and residue indexes
 ```
@@ -67,6 +67,7 @@ Clean up the model by restoring correct chain names and residue indexes
 #### calculating local similarity
 ```
 ~/imp_fast_clean/setup_environment.sh python src/calc_local_similarity.py key_models/closed.pdb key_models/open.pdb BDGI local_scores/closed_d6_n2.txt -d 6
+
 ```
 ## Open state fitting
 - setting up best models
