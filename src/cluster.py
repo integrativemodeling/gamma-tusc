@@ -42,16 +42,22 @@ except:
 file_list = [os.path.join(file_prefix,str(n),fname) for n in range(1,num_files+1) if os.path.isfile(os.path.join(file_prefix,str(n),fname))]
 my_file_list = IMP.pmi.tools.chunk_list_into_segments(file_list,number_of_processes)[rank]
 my_coords = []
-for fn in my_file_list:
+print 'rank',rank,'len files',len(my_file_list)
+for n,fn in enumerate(my_file_list):
     mh = IMP.atom.read_pdb(fn,mdl)
     coords = [list(IMP.core.XYZ(p).get_coordinates()) for p in IMP.core.get_leaves(mh)]
     my_coords.append({'gtusc':coords})
+    IMP.atom.destroy(mh)
     del mh
+    print 'rank',rank,'%.2f'%(float(n+1)/len(my_file_list)*100),'% done'
 
-gather_coords = IMP.pmi.tools.scatter_and_gather(my_coords)
-gather_names = IMP.pmi.tools.scatter_and_gather(my_file_list)
+print 'rank',rank,'scatter 1'
+gathered = IMP.pmi.tools.scatter_and_gather(zip(my_file_list,my_coords))
+#print 'rank',rank,'scatter 2'
+#gather_names = IMP.pmi.tools.scatter_and_gather(my_file_list)
+print 'rank',rank,'cluster fill'
 clusters = IMP.pmi.analysis.Clustering()
-for name,coords in zip(gather_names,gather_coords):
+for name,coords in gathered:
     clusters.fill(name,coords)
 
 print "Global calculating distance matrix"
