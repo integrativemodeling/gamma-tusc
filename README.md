@@ -10,7 +10,8 @@ This module creates models of the gamma tubulin small complex using MODELLER and
 #### Extract alignment to human GCP4, but limit GCP4 to what's in the PDB file
 ```
 > python src/align_to_pdb.py alignments/TUBGCP_promals.fasta data/gcp4_pos2.pdb GCP4_HUMAN alignments/gcp4_pdblim
-> python src/align_to_pdb.py alignments/gtub_seed_promals.fasta data/human_ytub_3CB2.pdb GTUB_HUMAN alignments/gtub_pdblim
+> python src/align_to_pdb.py alignments/gtub_seed_promals.fasta data/gtub_human_3CB2.pdb GTUB_HUMAN alignments/gtub_pdblim
+> python src/align_to_pdb.py alignments/gtub_seed_promals.fasta data/gtub_human_3CB2_edit.pdb GTUB_HUMAN alignments/gtub_edit_pdblim
 ```
 
 #### Create a few types of alignments
@@ -36,6 +37,7 @@ GCP3 - with and without SSEs
 Gamma tubulin w/pdb and insertion removal but no SSEs
 ```
 > python src/remove_insertions.py alignments/gtub_rp15_promals.fasta GTUB_HUMAN GTUB_YEAST 6 alignments/gtub/gtub_rp15_promals_ins6 -p alignments/gtub_pdblim.pir -o alignments/gtub/ins6_to_orig
+> python src/remove_insertions.py alignments/gtub_rp15_promals.fasta GTUB_HUMAN GTUB_YEAST 10 alignments/gtub_edit/gtub_rp15_promals_ins10 -p alignments/gtub_edit_pdblim.pir -o alignments/gtub/ins10_to_orig
 ```
 
 #### Combine the various alignments to setup modeling
@@ -48,7 +50,7 @@ From the alignment directory, call this "ad hoc" script to combine alignments an
 #### Homology modeling with MODELLER
 Back to the root directory, call model.py to start building models.
 ```
-> python src/model.py alignments/combo/ins5.pir 1 models/closed_ins5/ -d data/ -s alignments/combo/ins5.options -l 1
+> python src/model.py alignments/combo/ins5.pir 1 -d data/ -s alignments/combo/ins5.options -o models/closed_ins5/
 ```
 Clean up the model by restoring correct chain names and residue indexes
 ```
