@@ -29,7 +29,7 @@ def parse_args():
         parser.error("incorrect number of arguments "+str(len(args))+" " + str(args))
     return [options,args]
 
-class MyModel(loopmodel): #dope_loopmodel):
+class MyModel(automodel): #dope_loopmodel):
     breaks=[]
     sym_copies=[]
     sses=[]
@@ -38,6 +38,12 @@ class MyModel(loopmodel): #dope_loopmodel):
         self.inserts = inserts
         self.sses = sses
         self.sym_pairs = sym_pairs
+
+    #def select_loop_atoms(self):
+    #    sel0 = super(MyModel,self).select_loop_atoms()
+    #    sel1 = selection(self.residue_range(1894,1897))
+    #    print '>>>refining additional loops',''.join(self.residues[r].code for r in xrange(1893,1897))
+    #    return sel0 | sel1
 
     def special_restraints(self,aln):
         rsr = self.restraints
@@ -137,10 +143,9 @@ def run(env=None):
         os.chdir(out_dir)
         print 'working from',os.getcwd()
     if options.nloops>0:
-        a.md_level=None
         a.loop.starting_model=1
         a.loop.ending_model=options.nloops
-        a.loop.md_level=refine.very_fast
+        a.loop.md_level = refine.very_fast
     a.make()
 
     if options.out_dir!='':

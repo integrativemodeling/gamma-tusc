@@ -44,7 +44,7 @@ my_file_list = IMP.pmi.tools.chunk_list_into_segments(file_list,number_of_proces
 my_coords = []
 print 'rank',rank,'len files',len(my_file_list)
 for n,fn in enumerate(my_file_list):
-    mh = IMP.atom.read_pdb(fn,mdl)
+    mh = IMP.atom.read_pdb(fn,mdl,IMP.atom.CAlphaPDBSelector())
     coords = [list(IMP.core.XYZ(p).get_coordinates()) for p in IMP.core.get_leaves(mh)]
     my_coords.append({'gtusc':coords})
     IMP.atom.destroy(mh)

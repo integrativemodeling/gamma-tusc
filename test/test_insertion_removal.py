@@ -27,13 +27,15 @@ class TestInsertionRemover(unittest.TestCase):
         iremove = InsertionRemover(aln,2)
         fix_aln = iremove.get_alignment()
         seqs = get_temp_aln(fix_aln)
-
         self.assertEqual(seqs['TEMPLATE'],'-ABC-DEF--')
         self.assertEqual(seqs['TARGET'],  'YABC/DEFYY')
 
         temp_aln = iremove.get_current_target_alignment()
+        seqs = get_temp_aln(temp_aln)
         self.assertEqual(get_seq_from_aln(temp_aln,0),'YABCYYYDEFYY')
         self.assertEqual(get_seq_from_aln(temp_aln,1),'YABC---DEFYY')
+        self.assertEqual(seqs['ORIG_TARGET'], 'YABCYYYDEFYY')
+        self.assertEqual(seqs['FINAL_TARGET'],'YABC---DEFYY')
 
     def test_pdb_adjust(self):
         template  = 'ABC--DEF--'
@@ -170,6 +172,34 @@ class TestInsertionRemover(unittest.TestCase):
         mo2.append(nmo,offset=10)
         self.assertEqual(mo2.get_sses()['helices'][0],[15,17])
         self.assertEqual(mo2.get_insertions(),[[14,3]])
+
+    def test_do_not_model(self):
+        """Test the do not model option"""
+        template = 'AA--AAA'
+        target   = 'BBBBCBB'
+        env = environ()
+        aln = alignment(env)
+        aln.append_sequence(template)
+        aln.append_sequence(target)
+        aln[0].code = 'TEMPLATE'
+        aln[1].code = 'TARGET'
+
+        iremove = InsertionRemover(aln,1)
+        mo = ModelOptions()
+        mo.get_data()['do_not_model'].append([5,5])
+        iremove.enable_sses(mo)
+        fix_aln = iremove.get_alignment()
+        fix_aln.write(file='test.pir',alignment_format='PIR')
+        #ff2 = alignment(env,file='test.pir')
+        #print '>>>',get_seq_from_aln(ff2,0)
+        #print '>>>',get_seq_from_aln(ff2,1)
+        seqs = get_temp_aln(fix_aln)
+        self.assertEqual(seqs['TEMPLATE'],'AAAAA')      #<-- weird but I guess it's ok!
+        self.assertEqual(seqs['TARGET'],  'BB/BB')      #
+        ff2 = alignment(env)
+        ff2.append_sequence(seqs['TEMPLATE'])
+        ff2.append_sequence(seqs['TARGET'])
+        ff2.write('test.pap',alignment_format='PAP')
 
 if __name__=="__main__":
     unittest.main()

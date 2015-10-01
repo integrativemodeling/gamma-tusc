@@ -9,14 +9,20 @@ def get_seq_len(seq):
     return len([s for s in seq if s not in '-/.'])
 
 ### config
+#template_fn = 'closed_template_edit.pdb'
 template_fn = 'closed_template.pdb'
+g2fn = 'gcp2/ins5_sse.pir'
+g3fn = 'gcp3/ins5_sse.pir'
+gtfn = 'gtub/gtub_rp15_promals_ins10.pir'
+sfn = '../data/spc110_fragment.pir'
+
 
 ### read sequences etc
 env = environ()
-s2 = get_seqs_from_pir('gcp2/ins5_sse.pir')
-s3 = get_seqs_from_pir('gcp3/ins5_sse.pir')
-sG = get_seqs_from_pir('gtub/gtub_rp15_promals_ins6.pir')
-s110 = get_seqs_from_fasta('../data/spc110_fragment.fasta')
+s2 = get_seqs_from_pir(g2fn)
+s3 = get_seqs_from_pir(g3fn)
+sG = get_seqs_from_pir(gtfn)
+s110 = get_seqs_from_pir(sfn)
 mo2 = ModelOptions('gcp2/GCP2.options')
 mo3 = ModelOptions('gcp3/GCP3.options')
 aln2o = alignment(env,file='gcp2/ins5_to_orig.pir')
@@ -24,18 +30,20 @@ aln3o = alignment(env,file='gcp3/ins5_to_orig.pir')
 out_dir = 'combo/'
 
 ### create alignment
-aln_combo = alignment(env)
 temp_seq = '/'.join([s2['GCP4_HUMAN'],s3['GCP4_HUMAN'],sG['GTUB_HUMAN'],sG['GTUB_HUMAN'],s110['Spc110'],s110['Spc110']])
 temp_seq += '/'+temp_seq
 targ_seq = '/'.join([s2['GCP2_YEAST'],s3['GCP3_YEAST'],sG['GTUB_YEAST'],sG['GTUB_YEAST'],s110['Spc110'],s110['Spc110']])
 targ_seq += '/'+targ_seq
-aln_combo.append_sequence(temp_seq)
-aln_combo.append_sequence(targ_seq)
+#aln_combo.append_sequence(temp_seq)
+#aln_combo.append_sequence(targ_seq)
+aln_combo = text2aln(env,[temp_seq,targ_seq])
+
 aln_combo[0].name = "TEMPLATE"
 aln_combo[0].code = "TEMPLATE"
 aln_combo[0].atom_file = template_fn
 aln_combo[0].prottyp = 'structureX'
 aln_combo[0].source = "HUMAN"
+aln_combo[0].range = ('FIRST:@','END:')
 aln_combo[1].name = "TARGET"
 aln_combo[1].code = "TARGET"
 write_align(aln_combo,out_dir+'ins5')

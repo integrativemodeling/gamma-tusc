@@ -1,6 +1,7 @@
 from modeller import *
 import string
 import yaml
+import os,tempfile
 
 def get_seq_from_aln(aln,seqnum):
     seq=''
@@ -44,8 +45,8 @@ def get_seqs_from_pir(aln_fn):
     s1final = []
     for s0,s1 in zip(seqs[seq_names[0]],seqs[seq_names[1]]):
         s1final.append(s1)
-        if s1!='/':
-            s0final.append(s0)
+        #if s1!='/':
+        s0final.append(s0)
     seqs[seq_names[0]] = ''.join(s0final)
     seqs[seq_names[1]] = ''.join(s1final)
     return seqs
@@ -69,6 +70,28 @@ def get_seqs_from_fasta(aln_fn):
         cur_seq = ''
     return seqs
 
+def text2aln(env,seqs):
+    """Write text sequences to temporary FASTA and read them back with MODELLER"""
+    tfname = os.path.join(tempfile._get_default_tempdir(),
+                          next(tempfile._get_candidate_names()))
+    #tfname = 'tempfile.pir'
+    outf = open(tfname,'w')
+    for ns,seq in enumerate(seqs):
+        sfix = seq.replace('\n','')
+        print 'seq num',ns,'len',len(seq)
+        #outf.write('>%i\n'%ns)
+        #outf.write(sfix+'\n')
+        outf.write('>P1;%s\nsequence::     : :     : :::-1.00:-1.00\n'%ns)
+        num_groups = len(seq)/80+1
+        for ngroup in range(num_groups):
+            if ngroup<num_groups-1:
+                outf.write(seq[ngroup*80:(ngroup+1)*80]+'\n')
+            else:
+                outf.write(seq[ngroup*80:(ngroup+1)*80]+'*\n\n')
+    outf.close()
+    aln = alignment(env,file=tfname,alignment_format='PIR')
+    os.unlink(tfname)
+    return aln
 
 def write_align(aln,prefix):
     aln.write(prefix+'.pir',alignment_format="PIR")
@@ -216,7 +239,7 @@ class ModelOptions:
 
     def get_do_not_model(self):
         all_res = set()
-        for seg in self._data['do_not_model']:
+        for seg in self.get_data()['do_not_model']:
             all_res|=set(range(seg[0],seg[1]+1))
         return all_res
 
@@ -327,7 +350,7 @@ class InsertionRemover:
         targ_seq = []
         on_delete = False
         for npos,pos in enumerate(self.positions):
-            if pos.temp=='-' and pos.targ=='-':
+            if pos.temp=='-' and pos.targ=='-': # or pos.do_not_model):
                 continue
             if pos.to_delete:
                 if temp_seq!=[]:
@@ -335,14 +358,17 @@ class InsertionRemover:
             else:
                 # first add a slash if end of insertion
                 if on_delete:
+                    #temp_seq.append('-') #? thought I wasn't suppoed to add this
                     targ_seq.append('/')
 
                 # now add this column
                 temp_seq.append(pos.temp)
                 if pos.do_not_model:
+                    #temp_seq.append('-') # fix
                     targ_seq.append('-')
                 else:
                     targ_seq.append(pos.targ)
+
                 on_delete = False
 
         # a bit of a hack: must remove any dangling breaks
@@ -354,8 +380,9 @@ class InsertionRemover:
 
         targ_seq = ''.join(targ_seq)
         temp_seq = ''.join(temp_seq)
-        print 'TEMP',temp_seq[-10:]
-        print 'TARG',targ_seq[-10:]
+        print 'TEMP',temp_seq
+        print 'TARG',targ_seq
+
         aln = alignment(self.orig_aln.env)
         aln.append_sequence(temp_seq)
         aln.append_sequence(targ_seq)
