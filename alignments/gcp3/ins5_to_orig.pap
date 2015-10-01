@@ -45,8 +45,8 @@ FINAL_TARGET  TRVLQEAVQLSSLRHLMNSPRNSSVINGLDARVLDLGHGSVGWDVFTLDYILYPPLSLVLNVNR
 
  _aln.pos      580       590       600       610       620       630       640
 ORIG_TARGET   PFGRKEYLRIFNFLWRFKKNNYFYQKEMLKSNDIIRSFKKIRGYNPLIRDIINKLSRISILRTQ 
-FINAL_TARGET  PFGRKEYLRIFNFLWRFKKNNYFYQKEMLKSNDIIRSFK------------INKLSRISILRTQ 
- _consrvd     ***************************************            *************
+FINAL_TARGET  PFGRKEYLRIFNFLWRFKKNNYFYQKEMLKSNDIIR---------------INKLSRISILRTQ 
+ _consrvd     ************************************               *************
 
  _aln.pos            650       660       670       680       690       700
 ORIG_TARGET   FQQFNSKMESYYLNCIIEENFKEMTRKLQRTENKSQNQFDLIRLNNGTIELNGILTPKAEVLTK 
@@ -55,13 +55,13 @@ FINAL_TARGET  FQQFNSKMESYYLNCIIEENFKEMTRKLQRT---------------------------------
 
  _aln.pos        710       720       730       740       750       760
 ORIG_TARGET   SSSSKPQKHAIEKTLNIDELESVHNTFLTNILSHKLFATNTSEISVGDYSGQPYPTSLVLLLNS 
-FINAL_TARGET  --------------LNIDELESVHNTFLTNILSHKLFATNTSEISVGDYSGQPYPTSLVLLLNS 
- _consrvd                   **************************************************
+FINAL_TARGET  --------------LNIDELESVHNTFLTNILSHKLFAT------------QPYPTSLVLLLNS 
+ _consrvd                   *************************            *************
 
  _aln.pos    770       780       790       800       810       820       830
 ORIG_TARGET   VYEFVKVYCNLNDIGYEIFIKMNLNDHEASNGLLGKFNTNLKEIVSQYKNFKDRLYIFRADLKN 
-FINAL_TARGET  VYEFVKVYCNLNDIG--------------SNGLLGKFNTNLKEIVSQYKNFKDRLYIFRADLKN 
- _consrvd     ***************              ***********************************
+FINAL_TARGET  VYEFVKVYCNLN-----------------SNGLLGKFNTNLKEIVSQYKNFKDRLYIFRADLKN 
+ _consrvd     ************                 ***********************************
 
  _aln.pos          840
 ORIG_TARGET   DGDEELFLLSKSLR 
