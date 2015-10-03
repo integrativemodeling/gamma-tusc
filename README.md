@@ -65,8 +65,25 @@ Clean up the model by restoring correct chain names and residue indexes
 
 ## Analysis
 #### finding best models
+Use VMD scoring script (in src). You can split this into multiple runs/files if you want
+```
+vmd -dispdev text -eofexit < src/score_cc.tcl -args data/ringmasked_crop.situs 6.9 models/closed_ins5 1 300 models/ccs_closed.dat
+```
+Seperately run k-means clustering (MPI aware)
+```
+mpirun -n p8 $IMPFAST python src/cluster.py models/closed_ins5/ 300 tusc_flex.pdb 4 models/closed_clust4/
+```
+If you've already computed a distance matrix, just add the prefix to that file:
+```
+mpirun -n p8 $IMPFAST python src/cluster.py models/closed_ins5/ 300 tusc_flex.pdb 5 models/closed_clust5/ models/closed_clust4/cdist
+```
+
 #### calculating RMSF
+Open the top cluster with VMD and run the RMSF utility
+
 #### calculating local similarity
+calc_local.py
+
 ```
 ~/imp_fast_clean/setup_environment.sh python src/calc_local_similarity.py key_models/closed.pdb key_models/open.pdb BDGI local_scores/closed_d6_n2.txt -d 6
 

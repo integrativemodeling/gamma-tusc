@@ -71,7 +71,7 @@ if rank==0:
     if dmat is None:
         if display_plot:
             clusters.plot_matrix(figurename=out_dir+"/clusters.png")
-        clusters.save_distance_matrix_file(out_dir+"/clusters.dat")
+        clusters.save_distance_matrix_file(out_dir+"/cdist")
     else:
         print 'loading distance matrix file'
         clusters.load_distance_matrix_file(dmat)
