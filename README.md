@@ -68,18 +68,23 @@ Clean up the model by restoring correct chain names and residue indexes
 Use VMD scoring script (in src). You can split this into multiple runs/files if you want
 ```
 vmd -dispdev text -eofexit < src/score_cc.tcl -args data/ringmasked_crop.situs 6.9 models/closed_ins5 1 300 models/ccs_closed.dat
+vmd -dispdev text -eofexit < src/score_cc.tcl -args data/open_map.situs 8.0 models/open_ins5 1 300 models/ccs_open.dat
 ```
 Seperately run k-means clustering (MPI aware)
 ```
-mpirun -n p8 $IMPFAST python src/cluster.py models/closed_ins5/ 300 tusc_flex.pdb 4 models/closed_clust4/
+mpirun -n p8 $IMPFAST python src/cluster.py models/closed_ins5/ 300 tusc_flex.pdb 10 models/closed_clust10/
 ```
 If you've already computed a distance matrix, just add the prefix to that file:
 ```
-mpirun -n p8 $IMPFAST python src/cluster.py models/closed_ins5/ 300 tusc_flex.pdb 5 models/closed_clust5/ models/closed_clust4/cdist
+mpirun -n p8 $IMPFAST python src/cluster.py models/closed_ins5/ 300 tusc_flex.pdb 5 models/closed_clust5/ models/closed_clust10/cdist
 ```
 
 #### calculating RMSF
-Open the top cluster with VMD and run the RMSF utility
+Here I'm analyzing the RMSF of a particular cluster. This outputs both RMSF as a text file and also as the bfactors in a pdb file.
+```
+$IMPFAST python src/measure_rmsf.py "models/closed_clust4/cluster.1/*.pdb" models/closed_clust4/cluster.1/284.pdb models/closed_clust4/cluster.1/rmsf
+$IMPFAST python src/measure_rmsf.py "models/open_ins5/*/tusc_flex.pdb" models/open_ins5/133/tusc_flex.pdb models/results/rmsf_open
+```
 
 #### calculating local similarity
 calc_local.py
